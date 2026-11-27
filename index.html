@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apotek Sehat - Sistem Apotek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">✚</div>
+        <div>
+            <h2>Apotek Sehat</h2>
+            <small>Pharmacy Management</small>
+        </div>
+    </div>
+
+    <p class="menu-label">MENU UTAMA</p>
+
+    <nav>
+        <a href="#dashboard" class="active">▦ Dashboard</a>
+        <a href="#obat">💊 Data Obat</a>
+        <a href="#tambah">＋ Tambah Barang</a>
+        <a href="#keranjang">🛒 Keranjang <span id="jumlahCart">0</span></a>
+        <a href="#riwayat">📋 Riwayat Transaksi</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div>👤 Administrator</div>
+        <small>Sistem Apotek v2.0</small>
+    </div>
+</div>
+
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Selamat datang di Apotek Sehat!</p>
+        </div>
+        <div class="admin-badge">🟢 Admin</div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+        <div class="welcome">
+            <div>
+                <h2>Selamat Datang! 👋</h2>
+                <p>Kelola persediaan dan transaksi apotek dengan mudah.</p>
+            </div>
+            <div class="welcome-icon">💊</div>
+        </div>
+
+        <div class="statistics">
+            <div class="stat-card">
+                <div class="stat-icon green">💊</div>
+                <p>Total Jenis Obat</p>
+                <h2 id="totalObat">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon blue">📦</div>
+                <p>Total Stok</p>
+                <h2 id="totalStok">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">⚠️</div>
+                <p>Stok Menipis</p>
+                <h2 id="stokMenipis">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">🛒</div>
+                <p>Total Transaksi</p>
+                <h2 id="totalTransaksi">0</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA OBAT -->
+    <section class="panel" id="obat">
+        <div class="section-title">
+            <div>
+                <h2>Daftar Obat</h2>
+                <p>Daftar barang yang tersedia di apotek.</p>
+            </div>
+            <button class="primary-btn" onclick="bukaTambah()">
+                + Tambah Obat
+            </button>
+        </div>
+
+        <div class="tools">
+            <input type="text" id="cariObat"
+                placeholder="🔍 Cari nama obat..."
+                oninput="tampilkanObat()">
+
+            <select id="kategoriFilter" onchange="tampilkanObat()">
+                <option value="Semua">Semua Kategori</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Kapsul">Kapsul</option>
+                <option value="Sirup">Sirup</option>
+                <option value="Salep">Salep</option>
+                <option value="Vitamin">Vitamin</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Obat</th>
+                        <th>Kategori</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelObat"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FORM TAMBAH -->
+    <section class="panel" id="tambah">
+        <div class="section-title">
+            <div>
+                <h2 id="judulForm">Tambah Barang</h2>
+                <p>Masukkan informasi obat baru.</p>
+            </div>
+        </div>
+
+        <form id="formObat">
+            <input type="hidden" id="idObat">
+
+            <div class="form-grid">
+                <div>
+                    <label>Nama Obat</label>
+                    <input id="namaObat" type="text"
+                        placeholder="Masukkan nama obat" required>
+                </div>
+
+                <div>
+                    <label>Kategori</label>
+                    <select id="kategoriObat" required>
+                        <option value="">Pilih kategori</option>
+                        <option>Tablet</option>
+                        <option>Kapsul</option>
+                        <option>Sirup</option>
+                        <option>Salep</option>
+                        <option>Vitamin</option>
+                        <option>Lainnya</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Harga (Rp)</label>
+                    <input id="hargaObat" type="number"
+                        min="0" placeholder="Contoh: 10000" required>
+                </div>
+
+                <div>
+                    <label>Stok Barang</label>
+                    <input id="stokObat" type="number"
+                        min="0" placeholder="Contoh: 50" required>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button class="primary-btn" type="submit">Simpan Barang</button>
+                <button class="secondary-btn" type="button"
+                    onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- KERANJANG -->
+    <section class="panel" id="keranjang">
+        <div class="section-title">
+            <div>
+                <h2>🛒 Keranjang Belanja</h2>
+                <p>Daftar obat yang akan dibeli.</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Obat</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Subtotal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelKeranjang"></tbody>
+            </table>
+        </div>
+
+        <div class="cart-bottom">
+            <div>
+                <p>Total Pembayaran</p>
+                <h2 id="totalHarga">Rp 0</h2>
+            </div>
+
+            <div class="checkout">
+                <input type="text" id="namaPembeli"
+                    placeholder="Nama pembeli">
+                <button class="primary-btn" onclick="checkout()">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- RIWAYAT -->
+    <section class="panel" id="riwayat">
+        <div class="section-title">
+            <div>
+                <h2>📋 Riwayat Transaksi</h2>
+                <p>Daftar pembelian yang sudah diselesaikan.</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Pembeli</th>
+                        <th>Tanggal</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelRiwayat"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        © 2026 Apotek Sehat | Sistem Manajemen Apotek
+    </footer>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
